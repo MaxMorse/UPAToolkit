@@ -140,11 +140,11 @@ public class UPADrawer : MonoBehaviour {
 		if (CurrentImg.tool == UPATool.BoxBrush)
 			GUI.backgroundColor = new Color (0.7f, 0.7f, 0.7f);
 		if (GUI.Button (new Rect (450, 4, 60, 30), "Box Fill")) {
-			EditorUtility.DisplayDialog(
+			/*EditorUtility.DisplayDialog(
 				"In Development",
 				"This feature is currently being developed.",
-				"Get it done please");
-			//tool = UPATool.BoxBrush;
+				"Get it done please"); */
+			CurrentImg.tool = UPATool.BoxBrush;
 		}
 		GUI.backgroundColor = Color.white;
 		if (CurrentImg.tool == UPATool.Eraser)
@@ -360,5 +360,10 @@ public class UPADrawer : MonoBehaviour {
 
 		//CurrentImg.selectedLayer = GUI.Toolbar (new Rect (4, window.height - 200, 90, 30), CurrentImg.selectedLayer, layerNames);
 	}
-	
+	//Mel's edit
+    public static void DrawFillBox()
+    {
+        Debug.Log("inside DrawFillBox");
+        EditorGUI.DrawRect(CurrentImg.fillBox, Color.blue);
+    }
 }

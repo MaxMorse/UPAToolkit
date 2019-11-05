@@ -62,8 +62,20 @@ public class UPAImage : ScriptableObject {
 
 	//MISC VARIABLES
 
-	public bool dirty = false;		// Used for determining if data has changed
-	
+	public bool dirty = false;      // Used for determining if data has changed
+    //Mel's edit
+    private Rect _fillBox = new Rect(50, 50, 50, 50);
+    public Rect fillBox
+    {
+        get { return _fillBox; }
+        set
+        {
+            value.width = gridSpacing;
+            value.height = gridSpacing;
+            _fillBox = value;
+        }
+    }
+    public bool renderFillBox = false;
 	
 	// Class constructor
 	public UPAImage () {
@@ -223,4 +235,8 @@ public class UPAImage : ScriptableObject {
 			selectedLayer = index - 1;
 		}
 	}
+
+    
+
+    
 }

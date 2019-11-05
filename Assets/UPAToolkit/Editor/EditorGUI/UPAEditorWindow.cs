@@ -113,24 +113,38 @@ public class UPAEditorWindow : EditorWindow {
 		if (e.button == 0) {
 			
 			// Mouse buttons
-			if (e.isMouse && mousePos.y > 40 && e.type != EventType.MouseUp) {
+			if (e.isMouse && mousePos.y > 40) {
 				if (!UPADrawer.GetLayerPanelRect (window.position).Contains (mousePos)) {
-					
-					if (tool == UPATool.Eraser)
-						CurrentImg.SetPixelByPos (Color.clear, mousePos, CurrentImg.selectedLayer);
-					else if (tool == UPATool.PaintBrush)
-						CurrentImg.SetPixelByPos (selectedColor, mousePos, CurrentImg.selectedLayer);
-					else if (tool == UPATool.BoxBrush)
-						Debug.Log ("TODO: Add Box Brush tool.");
-					else if (tool == UPATool.ColorPicker){
-						Vector2 pCoord = CurrentImg.GetPixelCoordinate (mousePos);
-						Color? newColor = CurrentImg.GetBlendedPixel( (int)pCoord.x, (int)pCoord.y );
-						if (newColor != null && newColor != Color.clear){
-							selectedColor = (Color)newColor;
-						}
-						tool = lastTool;
-					}
-					
+                    //Debug.Log("editing image");
+                    if (e.type != EventType.MouseUp)
+                    {
+                        if (tool == UPATool.Eraser)
+                            CurrentImg.SetPixelByPos(Color.clear, mousePos, CurrentImg.selectedLayer);
+                        else if (tool == UPATool.PaintBrush)
+                            CurrentImg.SetPixelByPos(selectedColor, mousePos, CurrentImg.selectedLayer);
+                        else if (tool == UPATool.BoxBrush)
+                            if (e.type == EventType.MouseDown)
+                            {
+                                CurrentImg.renderFillBox = true;
+                                CurrentImg.fillBox = new Rect(mousePos.x, mousePos.y, 50, 50);
+                               // CurrentImg.fillBox.y = mousePos.y;
+                            }
+                            else if(e.type == EventType.MouseDrag)
+                            {
+                                CurrentImg.renderFillBox = true;
+                            }
+
+                            else if (tool == UPATool.ColorPicker)
+                            {
+                                Vector2 pCoord = CurrentImg.GetPixelCoordinate(mousePos);
+                                Color? newColor = CurrentImg.GetBlendedPixel((int)pCoord.x, (int)pCoord.y);
+                                if (newColor != null && newColor != Color.clear)
+                                {
+                                    selectedColor = (Color)newColor;
+                                }
+                                tool = lastTool;
+                            }
+                    }
 				}
 			}
 			
@@ -196,7 +210,16 @@ public class UPAEditorWindow : EditorWindow {
 		UPADrawer.DrawToolbar (window.position, mousePos);
 		
 		UPADrawer.DrawLayerPanel ( window.position );
-		
-		e.Use();	// Release event handler
+        //Mel's edit
+        if (tool == UPATool.BoxBrush)
+        {
+            UPADrawer.DrawFillBox();
+            CurrentImg.renderFillBox = false;
+        }
+
+        if (e.type != EventType.Repaint  && e.type != EventType.Layout)
+        {
+            e.Use();    // Release event handler
+        }
 	}
 }
