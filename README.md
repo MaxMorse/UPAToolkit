@@ -17,5 +17,3 @@ This project is fully compatible with [Unity](http://unity3d.com) Personal Editi
 
 ###Copyright
 See LICENSE.
-
-this is a test -max
